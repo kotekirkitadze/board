@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Contrib Board</title>
+<link rel="stylesheet" href="styles.css" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>🗂️</text></svg>" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-dot" aria-hidden="true"></span>
+      <h1 id="board-title" class="brand-name">Contrib Board</h1>
+      <p class="brand-sub"><span id="board-owner">aivazashvili on drupal.org</span> · synced <span id="board-synced">—</span></p>
+    </div>
+
+    <div class="topbar-tools">
+      <div class="search">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M11.7 10.3a6 6 0 1 0-1.4 1.4l3 3a1 1 0 0 0 1.4-1.4zM7 11a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/></svg>
+        <input id="search" type="search" placeholder="Filter cards…" autocomplete="off" spellcheck="false" />
+        <kbd>/</kbd>
+      </div>
+      <button id="btn-add" class="btn btn-primary" type="button">New card</button>
+      <div class="menu">
+        <button id="btn-menu" class="btn btn-icon" type="button" aria-haspopup="true" aria-expanded="false" title="Board actions">⋯</button>
+        <div id="menu-pop" class="menu-pop" hidden>
+          <button type="button" data-act="export">Export JSON</button>
+          <button type="button" data-act="import">Import JSON…</button>
+          <button type="button" data-act="sync">Mark synced today</button>
+          <button type="button" data-act="reset" class="danger">Reset to sample board</button>
+          <button type="button" data-act="clear" class="danger">Delete all cards</button>
+        </div>
+      </div>
+    </div>
+
+    <nav id="counts" class="counts" aria-label="Column totals"></nav>
+  </header>
+
+  <main id="board" class="board" aria-label="Task board"></main>
+
+  <input id="file-input" type="file" accept="application/json,.json" hidden />
+
+  <!-- Card editor -->
+  <dialog id="editor" class="editor">
+    <form id="editor-form">
+      <div class="editor-head">
+        <h2 id="editor-title">New card</h2>
+        <button type="button" class="btn btn-icon" data-close aria-label="Close">✕</button>
+      </div>
+
+      <div class="grid">
+        <label class="f f-2">
+          <span>Title</span>
+          <input name="title" required maxlength="140" placeholder="Default option: pick a project name if it already exists" />
+        </label>
+
+        <label class="f">
+          <span>Project</span>
+          <input name="project" list="projects" maxlength="40" placeholder="one_line_installer" />
+          <datalist id="projects"></datalist>
+        </label>
+
+        <label class="f">
+          <span>Issue #</span>
+          <input name="issue" inputmode="numeric" maxlength="12" placeholder="3601382" />
+        </label>
+
+        <label class="f">
+          <span>Column</span>
+          <select name="column" id="f-column"></select>
+        </label>
+
+        <label class="f f-2">
+          <span>URL · opened when the issue number is clicked</span>
+          <input name="url" type="url" inputmode="url" maxlength="400"
+                 placeholder="https://www.drupal.org/project/ai/-/work_items/3601385" />
+        </label>
+
+        <label class="f">
+          <span>Role</span>
+          <input name="role" list="roles" maxlength="24" placeholder="DEV" />
+          <datalist id="roles">
+            <option value="DEV"></option>
+            <option value="DEV (PLANNED)"></option>
+            <option value="REVIEW"></option>
+            <option value="REPORTER"></option>
+            <option value="TRIAGE"></option>
+          </datalist>
+        </label>
+
+        <label class="f">
+          <span>Flag text</span>
+          <input name="flagText" maxlength="60" placeholder="act fast · maintainer may finish it" />
+        </label>
+
+        <label class="f">
+          <span>Flag tone</span>
+          <select name="flagTone">
+            <option value="warn">Amber — attention</option>
+            <option value="ok">Green — good</option>
+            <option value="info">Blue — neutral</option>
+            <option value="bad">Red — risk</option>
+          </select>
+        </label>
+
+        <label class="f f-2">
+          <span>LAST · what happened</span>
+          <input name="last" maxlength="200" placeholder="Aug 14 · commented, joined the issue fork; assigned to me" />
+        </label>
+
+        <label class="f f-2">
+          <span>NEXT · what to do</span>
+          <input name="next" maxlength="200" placeholder="continue the work" />
+        </label>
+      </div>
+
+      <div class="editor-foot">
+        <button type="button" id="btn-delete" class="btn btn-danger" hidden>Delete</button>
+        <span class="spacer"></span>
+        <button type="button" class="btn" data-close>Cancel</button>
+        <button type="submit" class="btn btn-primary">Save card</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
